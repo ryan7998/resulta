@@ -1,0 +1,65 @@
+<?php
+/**
+ * Implements hook_block_info().
+ */
+function resulta_block_info() {
+
+  $blocks['resulta_block'] = array(
+    'info' => t('Resulta Block'),
+    'description'=>t('This is custom block to print ACME Sports results'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * This hook generates the contents of the blocks.
+ */
+function resulta_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'resulta_block':
+      $block['content'] = getData();
+  }
+  return $block;
+}
+
+/**
+ *  This function gets data from link in json code
+ *  formats the json code to array of objects
+ *  then returns html to show data in table
+ */
+function getData(){
+  $url = 'http://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0';
+  $get_json = file_get_contents($url);
+  $data = json_decode($get_json);
+  $team_arr = $data->results->data->team;
+  
+
+  $html = '<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Nick Name</th>
+      <th scope="col">Display Name</th>
+      <th scope="col">Id</th>
+      <th scope="col">Conference</th>
+      <th scope="col">Division</th>
+    </tr>
+  </thead>
+  <tbody>';
+
+  foreach($team_arr as $values){
+    $html .= '<tr>'
+    . '<th scope="row">' . $values->name . '</th>'
+    . '<td>'. $values->nickname . '</td>'
+    . '<td>'. $values->display_name . '</td>'
+    . '<td>'. $values->id . '</td>'
+    . '<td>'. $values->conference . '</td>'
+    . '<td>'. $values->division . '</td>'
+    . '</tr>';
+  }
+  $html .= '</tbody></table>';
+  return $html;
+}

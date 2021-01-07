@@ -1,0 +1,4 @@
+name = Resulta
+description = Module for resulta
+core = 7.x
+files[] = resulta.module
