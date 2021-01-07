@@ -7,4 +7,5 @@
     - file_get_contents() function used to get contents from API endpoint URL
     - json_decode() function used to decode the json content and saved in an array (team_arr)
     - bootstrap table created to show the data
+    - the block is rendered in the front page
 
